@@ -17,8 +17,8 @@ const StyledImageGallery = styled.ul`
 
 export const ImageGallery = ({ posts, onClick }) => {
   return (
-    <StyledImageGallery onClick={onClick}>
-      <ImageGalleryItem posts={posts} />
+    <StyledImageGallery>
+      <ImageGalleryItem posts={posts} onClick={onClick} />
     </StyledImageGallery>
   );
 };

@@ -14,7 +14,7 @@ const StyledImage = styled.img`
   transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 `;
 
-export const ImageGalleryItem = ({ posts }) => {
+export const ImageGalleryItem = ({ posts, onClick }) => {
   return (
     <>
       {posts &&
@@ -22,6 +22,7 @@ export const ImageGalleryItem = ({ posts }) => {
           return (
             <StlyedList key={post.id}>
               <StyledImage
+                onClick={onClick}
                 src={post.webformatURL}
                 alt={post.tags}
                 id={post.id}
@@ -34,6 +35,7 @@ export const ImageGalleryItem = ({ posts }) => {
 };
 
 ImageGalleryItem.propTypes = {
+  onClick: PropTypes.func.isRequired,
   posts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
