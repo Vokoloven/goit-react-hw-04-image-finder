@@ -65,7 +65,7 @@ export class Searchbar extends Component {
         <StyledSearchbar>
           <StyledForm onSubmit={this.props.onSubmit}>
             <StyledSearchFormButton button type="submit">
-              <MdScreenSearchDesktop style={{ color: 'red' }} size="25px" />
+              <MdScreenSearchDesktop style={{ color: 'red' }} size="40px" />
             </StyledSearchFormButton>
             <StyledInput
               type="text"
