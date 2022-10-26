@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { MdScreenSearchDesktop } from 'react-icons/md';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const StyledSearchbar = styled.header`
   top: 0;
@@ -79,3 +80,7 @@ export class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ImageGalleryItem } from '../ImageGalleryItem';
 
@@ -14,10 +15,15 @@ const StyledImageGallery = styled.ul`
   margin-right: auto;
 `;
 
-export const ImageGallery = ({ posts }) => {
+export const ImageGallery = ({ posts, onClick }) => {
   return (
-    <StyledImageGallery>
+    <StyledImageGallery onClick={onClick}>
       <ImageGalleryItem posts={posts} />
     </StyledImageGallery>
   );
+};
+
+ImageGallery.propTypes = {
+  posts: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
 };

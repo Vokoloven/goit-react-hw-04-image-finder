@@ -4,10 +4,15 @@ import { getApiService } from '../services/post.service';
 import { Status } from '../config';
 import { ImageGallery } from './ImageGallery';
 import { Button } from './Button';
+import { Loader } from './Loader/Loader';
+import { Modal } from './Modal';
+import { NoFound } from './NoFound';
 export class App extends Component {
   state = {
     status: Status.INIT,
     posts: [],
+    showModal: false,
+    idImg: 0,
     params: {
       q: '',
       page: 1,
@@ -27,6 +32,10 @@ export class App extends Component {
     this.setState({ status: Status.LOADING });
     try {
       const response = await getApiService(params);
+
+      if (response.length === 0) {
+        return this.setState({ status: Status.NOFOUND });
+      }
 
       this.setState(prevState => {
         return {
@@ -61,14 +70,30 @@ export class App extends Component {
     }));
   };
 
+  toggleModal = e => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      idImg: Number(e.target.id),
+    }));
+  };
+
+  onClose = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
   render() {
-    const { status, posts } = this.state;
+    const { status, posts, showModal, idImg } = this.state;
 
     return (
       <>
         <Searchbar onSubmit={this.onSearchRequest} />
-        <ImageGallery posts={posts} />
+        <ImageGallery posts={posts} onClick={this.toggleModal} />
+        {status === Status.NOFOUND && <NoFound />}
         {status === Status.SUCCESS && <Button onClick={this.onClickButton} />}
+        {status === Status.LOADING && <Loader />}
+        {showModal && (
+          <Modal posts={posts} idImg={idImg} onClose={this.onClose} />
+        )}
       </>
     );
   }

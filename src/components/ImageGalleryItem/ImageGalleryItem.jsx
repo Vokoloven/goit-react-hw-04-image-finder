@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const StlyedList = styled.li`
@@ -20,10 +21,24 @@ export const ImageGalleryItem = ({ posts }) => {
         posts.map(post => {
           return (
             <StlyedList key={post.id}>
-              <StyledImage src={post.webformatURL} alt={post.tags} />
+              <StyledImage
+                src={post.webformatURL}
+                alt={post.tags}
+                id={post.id}
+              />
             </StlyedList>
           );
         })}
     </>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ),
 };

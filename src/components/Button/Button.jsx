@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const StyledButtonLoadMore = styled.button`
   background-color: #5d3dd1; /* Green */
@@ -13,6 +14,11 @@ const StyledButtonLoadMore = styled.button`
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: tomato;
+  }
 `;
 
 const DivFlex = styled.div`
@@ -26,4 +32,8 @@ export const Button = ({ onClick }) => {
       <StyledButtonLoadMore onClick={onClick}>Load More</StyledButtonLoadMore>
     </DivFlex>
   );
+};
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
