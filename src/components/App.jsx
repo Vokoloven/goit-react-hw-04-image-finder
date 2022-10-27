@@ -51,7 +51,7 @@ export class App extends Component {
   onSearchRequest = e => {
     e.preventDefault();
 
-    const searchValue = e.target.search.value;
+    const searchValue = e.target.search.value.toLowerCase();
 
     this.setState(prevState => {
       if (prevState.params.q === searchValue) {
