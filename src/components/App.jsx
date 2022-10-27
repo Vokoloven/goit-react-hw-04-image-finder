@@ -20,10 +20,10 @@ export class App extends Component {
   };
 
   componentDidUpdate(_, prevState) {
-    if (prevState.params.q !== this.state.params.q) {
-      this.fetchApi(this.state.params);
-    }
-    if (prevState.params.page !== this.state.params.page) {
+    if (
+      prevState.params.q !== this.state.params.q ||
+      prevState.params.page !== this.state.params.page
+    ) {
       this.fetchApi(this.state.params);
     }
   }
