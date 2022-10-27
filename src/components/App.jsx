@@ -54,6 +54,14 @@ export class App extends Component {
     const searchValue = e.target.search.value;
 
     this.setState(prevState => {
+      console.log();
+    });
+
+    this.setState(prevState => {
+      if (prevState.params.q === searchValue) {
+        return;
+      }
+
       return {
         params: { ...prevState.params, q: searchValue },
         posts: [],
