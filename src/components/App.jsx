@@ -59,7 +59,7 @@ export class App extends Component {
       }
 
       return {
-        params: { ...prevState.params, q: searchValue },
+        params: { ...prevState.params, q: searchValue, page: 1 },
         posts: [],
       };
     });
