@@ -1,5 +1,5 @@
+import { useState, useEffect } from 'react';
 import { Searchbar } from './Searchbar';
-import React, { Component } from 'react';
 import { getApiService } from '../services/post.service';
 import { Status } from '../config';
 import { ImageGallery } from './ImageGallery';
@@ -7,98 +7,87 @@ import { Button } from './Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal';
 import { NoFound } from './NoFound';
-export class App extends Component {
-  state = {
-    status: Status.INIT,
-    posts: [],
-    showModal: false,
-    idImg: 0,
-    params: {
-      q: '',
-      page: 1,
-    },
-  };
 
-  componentDidUpdate(_, prevState) {
-    if (
-      prevState.params.q !== this.state.params.q ||
-      prevState.params.page !== this.state.params.page
-    ) {
-      this.fetchApi(this.state.params);
+export const App = () => {
+  const [status, setStatus] = useState('init');
+  const [params, setParams] = useState({ q: '', page: 1 });
+  const [posts, setPosts] = useState([]);
+  const [toggle, setToggle] = useState({ showModal: false, idImg: 0 });
+
+  const fetchApi = async data => {
+    if (params.q !== '') {
+      setStatus(Status.LOADING);
     }
-  }
-
-  fetchApi = async params => {
-    this.setState({ status: Status.LOADING });
     try {
-      const response = await getApiService(params);
+      const response = await getApiService(data);
 
       if (response.length === 0) {
-        return this.setState({ status: Status.NOFOUND });
+        return setStatus(Status.NOFOUND);
       }
-
-      this.setState(prevState => {
-        return {
-          posts: [...prevState.posts, ...response],
-          status: Status.SUCCESS,
-        };
-      });
+      if (params.q !== '') {
+        setPosts(prevState => {
+          return [...prevState, ...response];
+        });
+        setStatus(Status.SUCCESS);
+      }
     } catch {
-      this.setState({ status: Status.ERROR });
+      setStatus(Status.ERROR);
     }
   };
 
-  onSearchRequest = e => {
+  useEffect(() => {
+    if (params.q === '') {
+      return;
+    }
+
+    fetchApi(params);
+  }, [params]);
+
+  const onSearchRequest = e => {
     e.preventDefault();
 
     const searchValue = e.target.search.value.toLowerCase();
 
-    this.setState(prevState => {
-      if (prevState.params.q === searchValue) {
-        return;
+    setParams(prevState => {
+      if (params.q === searchValue) {
+        return { ...params, q: searchValue, page: 1 };
       }
 
-      return {
-        params: { ...prevState.params, q: searchValue, page: 1 },
-        posts: [],
-      };
+      return { ...params, q: searchValue, page: 1 };
+    });
+    setPosts(prevState => {
+      return [];
     });
   };
 
-  onClickButton = () => {
-    this.setState(({ params }) => ({
-      params: {
-        ...params,
-        page: params.page + 1,
-      },
-    }));
+  const onClickButton = () => {
+    setParams(prevState => {
+      return { ...params, page: params.page + 1 };
+    });
   };
 
-  toggleModal = e => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-      idImg: Number(e.target.id),
-    }));
+  const toggleModal = e => {
+    setToggle(prevState => {
+      return { showModal: !toggle.showModal, idImg: Number(e.target.id) };
+    });
   };
 
-  onClose = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  const onClose = () => {
+    setToggle(prevState => {
+      return { showModal: !toggle.showModal };
+    });
   };
 
-  render() {
-    const { status, posts, showModal, idImg } = this.state;
-
-    return (
-      <>
-        <Searchbar onSubmit={this.onSearchRequest} />
-        <ImageGallery posts={posts} onClick={this.toggleModal} />
-        {status === Status.NOFOUND && <NoFound />}
-        {status === Status.SUCCESS && <Button onClick={this.onClickButton} />}
-        {status === Status.LOADING && <Loader />}
-        {showModal && (
-          <Modal posts={posts} idImg={idImg} onClose={this.onClose} />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Searchbar onSubmit={onSearchRequest} />
+      <ImageGallery posts={posts} onClick={toggleModal} />
+      {status === Status.NOFOUND && <NoFound />}
+      {status === Status.SUCCESS && <Button onClick={onClickButton} />}
+      {status === Status.LOADING && <Loader />}
+      {toggle.showModal && (
+        <Modal posts={posts} idImg={toggle.idImg} onClose={onClose} />
+      )}
+    </>
+  );
+};

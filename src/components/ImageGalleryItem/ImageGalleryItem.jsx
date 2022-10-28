@@ -35,7 +35,7 @@ export const ImageGalleryItem = ({ posts, onClick }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  // onClick: PropTypes.func.isRequired,
   posts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

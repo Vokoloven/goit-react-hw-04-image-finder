@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const StyledOverlay = styled.div`
@@ -46,54 +46,49 @@ const StyledImg = styled.img``;
 //   }
 // };
 
-export class Modal extends Component {
-  state = {
-    img: [],
-  };
+export const Modal = ({ posts, idImg, onClose }) => {
+  const [img, setImg] = useState([]);
 
-  componentDidMount() {
-    this.getData();
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+  const getData = () => {
+    const filtered = posts.filter(post => post.id === idImg);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  getData = () => {
-    const filtered = this.props.posts.filter(
-      post => post.id === this.props.idImg
-    );
     const [filter] = filtered;
-    this.setState(state => ({
-      img: filter,
-    }));
+
+    setImg(prevState => {
+      return filter;
+    });
   };
 
-  handleKeyDown = e => {
+  useEffect(() => {
+    getData();
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const handleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBackDropClick = e => {
+  const handleBackDropClick = e => {
     if (e.target === e.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
-    const { img } = this.state;
-
-    return (
-      <StyledOverlay onClick={this.handleBackDropClick}>
-        <StyledModal>
-          {img && <StyledImg src={img.largeImageURL} id={img.id} />}
-        </StyledModal>
-      </StyledOverlay>
-    );
-  }
-}
+  return (
+    <StyledOverlay onClick={handleBackDropClick}>
+      <StyledModal>
+        {img && <StyledImg src={img.largeImageURL} id={img.id} />}
+      </StyledModal>
+    </StyledOverlay>
+  );
+};
 
 Modal.propTypes = {
   idImg: PropTypes.number.isRequired,

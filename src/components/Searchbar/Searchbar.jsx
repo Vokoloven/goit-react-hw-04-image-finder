@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { MdScreenSearchDesktop } from 'react-icons/md';
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const StyledSearchbar = styled.header`
@@ -58,28 +57,26 @@ const StyledSearchFormButton = styled.button`
   outline: none;
 `;
 
-export class Searchbar extends Component {
-  render() {
-    return (
-      <>
-        <StyledSearchbar>
-          <StyledForm onSubmit={this.props.onSubmit}>
-            <StyledSearchFormButton button type="submit">
-              <MdScreenSearchDesktop style={{ color: 'red' }} size="40px" />
-            </StyledSearchFormButton>
-            <StyledInput
-              type="text"
-              name="search"
-              autoComplete="off"
-              autoFocus
-              placeholder="Search images and photos"
-            ></StyledInput>
-          </StyledForm>
-        </StyledSearchbar>
-      </>
-    );
-  }
-}
+export const Searchbar = ({ onSubmit }) => {
+  return (
+    <>
+      <StyledSearchbar>
+        <StyledForm onSubmit={onSubmit}>
+          <StyledSearchFormButton button type="submit">
+            <MdScreenSearchDesktop style={{ color: 'red' }} size="40px" />
+          </StyledSearchFormButton>
+          <StyledInput
+            type="text"
+            name="search"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          ></StyledInput>
+        </StyledForm>
+      </StyledSearchbar>
+    </>
+  );
+};
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
