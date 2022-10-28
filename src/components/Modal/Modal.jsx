@@ -49,17 +49,23 @@ const StyledImg = styled.img``;
 export const Modal = ({ posts, idImg, onClose }) => {
   const [img, setImg] = useState([]);
 
-  const getData = () => {
-    const filtered = posts.filter(post => post.id === idImg);
-
-    const [filter] = filtered;
-
-    setImg(prevState => {
-      return filter;
-    });
-  };
-
   useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
+
+    const getData = () => {
+      const filtered = posts.filter(post => post.id === idImg);
+
+      const [filter] = filtered;
+
+      setImg(prevState => {
+        return filter;
+      });
+    };
+
     getData();
 
     window.addEventListener('keydown', handleKeyDown);
@@ -67,14 +73,7 @@ export const Modal = ({ posts, idImg, onClose }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleKeyDown = e => {
-    if (e.code === 'Escape') {
-      onClose();
-    }
-  };
+  }, [idImg, onClose, posts]);
 
   const handleBackDropClick = e => {
     if (e.target === e.currentTarget) {

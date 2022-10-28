@@ -14,31 +14,31 @@ export const App = () => {
   const [posts, setPosts] = useState([]);
   const [toggle, setToggle] = useState({ showModal: false, idImg: 0 });
 
-  const fetchApi = async data => {
-    if (params.q !== '') {
-      setStatus(Status.LOADING);
-    }
-    try {
-      const response = await getApiService(data);
-
-      if (response.length === 0) {
-        return setStatus(Status.NOFOUND);
-      }
-      if (params.q !== '') {
-        setPosts(prevState => {
-          return [...prevState, ...response];
-        });
-        setStatus(Status.SUCCESS);
-      }
-    } catch {
-      setStatus(Status.ERROR);
-    }
-  };
-
   useEffect(() => {
     if (params.q === '') {
       return;
     }
+
+    const fetchApi = async data => {
+      if (params.q !== '') {
+        setStatus(Status.LOADING);
+      }
+      try {
+        const response = await getApiService(data);
+
+        if (response.length === 0) {
+          return setStatus(Status.NOFOUND);
+        }
+        if (params.q !== '') {
+          setPosts(prevState => {
+            return [...prevState, ...response];
+          });
+          setStatus(Status.SUCCESS);
+        }
+      } catch {
+        setStatus(Status.ERROR);
+      }
+    };
 
     fetchApi(params);
   }, [params]);
